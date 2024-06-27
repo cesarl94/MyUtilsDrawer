@@ -1,8 +1,17 @@
 # MyUtilsDrawer
 
+<a name="table-of-contents"></a>
+## Table of Contents:
+> [ColorsFunctions:](#colors-functions)  
+> &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)  
+> &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)  
+> &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)  
+
+<a name="colors-functions"></a>
 ## Colors functions:
 
-### Colorspace conversion from sRGB to Linear and vice versa
+<a name="srgb-2-linear"></a>
+### Colorspace conversion: sRGB to Linear and vice versa
 ```javascript
 function srgbToLinear(c) {
     if (c <= 0.04045) {
@@ -38,6 +47,7 @@ const srgbColor2 = linearToSrgbRgb(linearRgbColor2);
 console.log("Linear RGB to sRGB:", srgbColor2);
 ```
 
+<a name="layer-color"></a>
 ### Layer Color
 This is the equivalent to put an color above other, supossing that we are using colors with alpha channel
 
@@ -49,6 +59,7 @@ vec4 layerColor(vec4 topColor, vec4 bottomColor){
 }
 ```
 
+<a name="gradient-shader"></a>
 ### Gradient Shader
 Piece of code of a fragment shader that receives two colors and two gradient points to create a interpolation
 ```glsl
