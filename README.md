@@ -1,7 +1,8 @@
 # MyUtilsDrawer
 
-## Colorspace:
+## Colors functions:
 
+### Colorspace conversion from sRGB to Linear and vice versa
 ```javascript
 function srgbToLinear(c) {
     if (c <= 0.04045) {
@@ -35,4 +36,47 @@ console.log("sRGB to Linear RGB:", linearRgbColor);
 const linearRgbColor2 = [0.05, 0.25, 0.5];
 const srgbColor2 = linearToSrgbRgb(linearRgbColor2);
 console.log("Linear RGB to sRGB:", srgbColor2);
+```
+
+### Layer Color
+This is the equivalent to put an color above other, supossing that we are using colors with alpha channel
+
+```glsl
+vec4 layerColor(vec4 topColor, vec4 bottomColor){
+    vec3 finalColor = topColor.rgb * topColor.a + bottomColor.rgb * bottomColor.a * (1.0 - topColor.a);
+    float finalAlpha = bottomColor.a + topColor.a * (1.0 - bottomColor.a);
+    return vec4(finalColor, finalAlpha);
+}
+```
+
+### Gradient Shader
+Piece of code of a fragment shader that receives two colors and two gradient points to create a interpolation
+```glsl
+varying vec2 vUvs;
+
+uniform sampler2D uSampler;
+uniform vec4 colorA;
+uniform vec4 colorB;
+uniform vec2 gradientPointA;
+uniform vec2 gradientPointB;
+
+void main() {
+    vec4 mainColor = texture2D(uSampler, vUvs);
+
+     // Storing vector A->P
+    vec2 a_to_p = vec2(vUvs.x - gradientPointA.x, vUvs.y - gradientPointA.y);
+    // Storing vector A->B
+    vec2 a_to_b = vec2(gradientPointB.x - gradientPointA.x, gradientPointB.y - gradientPointA.y);
+
+    //Basically finding the squared magnitude of a_to_b
+    float atb2 = a_to_b.x * a_to_b.x + a_to_b.y*a_to_b.y; 
+    //The dot product of a_to_p and a_to_b
+    float atp_dot_atb = a_to_p.x * a_to_b.x + a_to_p.y * a_to_b.y;
+
+    float t = atp_dot_atb / atb2;
+
+    mainColor.rgb = mix(colorA.rgb,colorB.rgb,vec3(t));
+    gl_FragColor = mainColor;
+    gl_FragColor *=  mainColor.a;
+}
 ```
