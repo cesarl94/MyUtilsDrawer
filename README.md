@@ -130,7 +130,7 @@ Derivated Parameters:
 static void CalculeJumpGravityAndInitialVelocity(double Height, double Duration, double &Gravity, double &InitialVelocity) {
 	Duration /= 2.0;
 	Gravity = 2.0 * Height / (Duration * Duration);
-	InitialVelocity = FMath::Sqrt(2.0 * GravityScale * Height);
+	InitialVelocity = FMath::Sqrt(2.0 * Gravity * Height);
 }
 ```
 
@@ -161,14 +161,14 @@ Input Parameters:
 * ParabolaDuration
 
 Derivated Parameters:
-* GravityScale
+* Gravity
 * InitialVelocity
 * TimeDilation
 
 
 ```cpp
 void OnStart(){
-    CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, GravityScale, InitialVelocity);
+    CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, Gravity, InitialVelocity);
     TimeDilation = ParabolaDuration / ParabolaDistance;
 }
 
@@ -176,7 +176,7 @@ void OnTick(float DeltaTime){
     AccumulatedTime += DeltaTime;
 
     float TimeDilated = AccumulatedTime / TimeDilation;
-    float ZPosition = InitialVelocity * TimeDilated - 0.5f * GravityScale * TimeDilated * TimeDilated;
+    float ZPosition = InitialVelocity * TimeDilated - 0.5f * Gravity * TimeDilated * TimeDilated;
 
     SubsceneComponent->SetRelativeLocation(FVector(TimeDilated, 0, ZPosition));
 }
