@@ -9,7 +9,7 @@
 > [ParabolicFunctions:](#parabolic-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Parabolic motion 1D and 2D:](#parabolic-motion)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump from height and duration](#parabolic-jump)<br>
-> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and duration](#parabolic-shot)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot from height, distance and duration](#parabolic-shot)<br>
 
 <a name="colors-functions"></a>
 ## Colors functions:
@@ -151,7 +151,7 @@ void OnTick(float DeltaTime){
 ```
 ---
 <a name="parabolic-shot"></a>
-### Calculate parabolic shot height, distance and duration
+### Calculate parabolic shot from height, distance and duration
 
 If you want to make a parabolic shot and you want to add time parameter to the previous function you'll need to do this:
 
