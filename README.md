@@ -2,13 +2,13 @@
 
 <a name="table-of-contents"></a>
 ## Table of Contents:
-> [ColorsFunctions:](#colors-functions)  
-> &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)
-> &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)
-> &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)
-> [ParabolicFunctions:](#parabolic-functions)
-> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump height and time](#parabolic-jump)
-> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and time](#parabolic-shot)
+> [ColorsFunctions:](#colors-functions)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)<br>
+> [ParabolicFunctions:](#parabolic-functions)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump height and time](#parabolic-jump)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and time](#parabolic-shot)<br>
 
 <a name="colors-functions"></a>
 ## Colors functions:
