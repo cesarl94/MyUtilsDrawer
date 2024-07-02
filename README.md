@@ -7,8 +7,9 @@
 > &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)<br>
 > [ParabolicFunctions:](#parabolic-functions)<br>
-> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump height and time](#parabolic-jump)<br>
-> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and time](#parabolic-shot)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Parabolic motion 1D and 2D:](#parabolic-motion)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump from height and duration](#parabolic-jump)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and duration](#parabolic-shot)<br>
 
 <a name="colors-functions"></a>
 ## Colors functions:
@@ -98,49 +99,77 @@ void main() {
 <a name="parabolic-functions"></a>
 ## Parabolic functions:
 
+<a name="parabolic-motion"></a>
+### Parabolic motion 1D and 2D:
+
+```
+y(t) = y0 + v0 * t + 1/2 * g * t^2
+```
+```
+y(t) = y0 + v0 * sin(a) * t + 1/2 * g * t^2
+x(t) = x0 + v0 * cos(a) * t
+```
+
+Where ``y0`` or ``x0`` are the initial position, ``v0`` is the initial velocity, ``g`` is gravity acceleration and ``t`` is the time in seconds
+
+---
 <a name="parabolic-jump"></a>
-### Calculate parabolic jump height and time
+### Calculate parabolic jump from height and duration
 
 https://www.desmos.com/calculator/vdkdg6z9pg?lang=es
 
 Input Parameters:
-* ParabolaHeight
-* ImpactTime
+* Height
+* Duration
 
 Derivated Parameters:
-* GravityScale
+* Gravity
 * InitialVelocity
 
 ```cpp
-static void CalculeJumpGravityAndInitialVelocity(double Height, double Time, double &GravityScale, double &InitialVelocity) {
-	Time /= 2.0;
-	GravityScale = 2.0 * Height / (Time * Time);
+static void CalculeJumpGravityAndInitialVelocity(double Height, double Duration, double &Gravity, double &InitialVelocity) {
+	Duration /= 2.0;
+	Gravity = 2.0 * Height / (Duration * Duration);
 	InitialVelocity = FMath::Sqrt(2.0 * GravityScale * Height);
+}
+```
+
+And then you can use it in your character like this (this will fall for the eternity) 
+```cpp
+void OnStart(){
+    CalculeJumpGravityAndInitialVelocity(Height, Duration, Gravity, InitialVelocity);
+}
+
+void OnJump(){
+    Velocity.Z = InitialVelocity;
+}
+
+void OnTick(float DeltaTime){
+    Velocity.Z += Gravity * DeltaTime;
+    Position.Z += Velocity.Z * DeltaTime;
 }
 ```
 ---
 <a name="parabolic-shot"></a>
-### Calculate parabolic shot height, distance and time
+### Calculate parabolic shot height, distance and duration
 
 If you want to make a parabolic shot and you want to add time parameter to the previous function you'll need to do this:
 
 Input Parameters:
 * ParabolaDistance
 * ParabolaHeight
-* ImpactTime
+* ParabolaDuration
 
 Derivated Parameters:
 * GravityScale
 * InitialVelocity
 * TimeDilation
 
-Auxiliar variables:
-* AccumulatedTime
 
 ```cpp
 void OnStart(){
     CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, GravityScale, InitialVelocity);
-    TimeDilation = ImpactTime / ParabolaDistance;
+    TimeDilation = ParabolaDuration / ParabolaDistance;
 }
 
 void OnTick(float DeltaTime){
