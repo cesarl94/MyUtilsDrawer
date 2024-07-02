@@ -101,7 +101,7 @@ void main() {
 <a name="parabolic-jump"></a>
 ### Calculate parabolic jump height and time
 
-[https://www.desmos.com/calculator/vdkdg6z9pg?lang=es]
+https://www.desmos.com/calculator/vdkdg6z9pg?lang=es
 
 Input Parameters:
 * ParabolaHeight
@@ -122,7 +122,7 @@ static void CalculeJumpGravityAndInitialVelocity(double Height, double Time, dou
 <a name="parabolic-shot"></a>
 ### Calculate parabolic shot height, distance and time
 
-If you want to transform this in a parabolic shot and you want to add time parameter you'll need to do this:
+If you want to make a parabolic shot and you want to add time parameter to the previous function you'll need to do this:
 
 Input Parameters:
 * ParabolaDistance
@@ -138,17 +138,17 @@ Auxiliar variables:
 * AccumulatedTime
 
 ```cpp
-OnStart(){
-	CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, GravityScale, InitialVelocity);
-	TimeDilation = ImpactTime / ParabolaDistance;
+void OnStart(){
+    CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, GravityScale, InitialVelocity);
+    TimeDilation = ImpactTime / ParabolaDistance;
 }
 
-OnTick(float DeltaTime){
-	AccumulatedTime += DeltaTime;
+void OnTick(float DeltaTime){
+    AccumulatedTime += DeltaTime;
 
-	float TimeDilated = AccumulatedTime / TimeDilation;
-	float ZPosition = InitialVelocity * TimeDilated - 0.5f * GravityScale * TimeDilated * TimeDilated;
+    float TimeDilated = AccumulatedTime / TimeDilation;
+    float ZPosition = InitialVelocity * TimeDilated - 0.5f * GravityScale * TimeDilated * TimeDilated;
 
-	SubsceneComponent->SetRelativeLocation(FVector(TimeDilated, 0, ZPosition));
+    SubsceneComponent->SetRelativeLocation(FVector(TimeDilated, 0, ZPosition));
 }
 ```
