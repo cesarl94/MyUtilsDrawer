@@ -3,9 +3,12 @@
 <a name="table-of-contents"></a>
 ## Table of Contents:
 > [ColorsFunctions:](#colors-functions)  
-> &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)  
-> &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)  
-> &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)  
+> &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)
+> &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)
+> &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)
+> [ParabolicFunctions:](#parabolic-functions)
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump height and time](#parabolic-jump)
+> &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot height, distance and time](#parabolic-shot)
 
 <a name="colors-functions"></a>
 ## Colors functions:
@@ -46,7 +49,7 @@ const linearRgbColor2 = [0.05, 0.25, 0.5];
 const srgbColor2 = linearToSrgbRgb(linearRgbColor2);
 console.log("Linear RGB to sRGB:", srgbColor2);
 ```
-
+---
 <a name="layer-color"></a>
 ### Layer Color
 This is the equivalent to put an color above other, supossing that we are using colors with alpha channel
@@ -58,7 +61,7 @@ vec4 layerColor(vec4 topColor, vec4 bottomColor){
     return vec4(finalColor, finalAlpha);
 }
 ```
-
+---
 <a name="gradient-shader"></a>
 ### Gradient Shader
 Piece of code of a fragment shader that receives two colors and two gradient points to create a interpolation
@@ -89,5 +92,63 @@ void main() {
     mainColor.rgb = mix(colorA.rgb,colorB.rgb,vec3(t));
     gl_FragColor = mainColor;
     gl_FragColor *=  mainColor.a;
+}
+```
+---
+<a name="parabolic-functions"></a>
+## Parabolic functions:
+
+<a name="parabolic-jump"></a>
+### Calculate parabolic jump height and time
+
+[https://www.desmos.com/calculator/vdkdg6z9pg?lang=es]
+
+Input Parameters:
+* ParabolaHeight
+* ImpactTime
+
+Derivated Parameters:
+* GravityScale
+* InitialVelocity
+
+```cpp
+static void CalculeJumpGravityAndInitialVelocity(double Height, double Time, double &GravityScale, double &InitialVelocity) {
+	Time /= 2.0;
+	GravityScale = 2.0 * Height / (Time * Time);
+	InitialVelocity = FMath::Sqrt(2.0 * GravityScale * Height);
+}
+```
+---
+<a name="parabolic-shot"></a>
+### Calculate parabolic shot height, distance and time
+
+If you want to transform this in a parabolic shot and you want to add time parameter you'll need to do this:
+
+Input Parameters:
+* ParabolaDistance
+* ParabolaHeight
+* ImpactTime
+
+Derivated Parameters:
+* GravityScale
+* InitialVelocity
+* TimeDilation
+
+Auxiliar variables:
+* AccumulatedTime
+
+```cpp
+OnStart(){
+	CalculeJumpGravityAndInitialVelocity(ParabolaHeight, ParabolaDistance, GravityScale, InitialVelocity);
+	TimeDilation = ImpactTime / ParabolaDistance;
+}
+
+OnTick(float DeltaTime){
+	AccumulatedTime += DeltaTime;
+
+	float TimeDilated = AccumulatedTime / TimeDilation;
+	float ZPosition = InitialVelocity * TimeDilated - 0.5f * GravityScale * TimeDilated * TimeDilated;
+
+	SubsceneComponent->SetRelativeLocation(FVector(TimeDilated, 0, ZPosition));
 }
 ```
