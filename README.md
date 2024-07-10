@@ -124,7 +124,7 @@ y(t) = y0 + v0 * sin(a) * t + 1/2 * g * t^2
 x(t) = x0 + v0 * cos(a) * t
 ```
 
-Where ``y0`` or ``x0`` are the initial position, ``v0`` is the initial velocity, ``g`` is gravity acceleration and ``t`` is the time in seconds
+Where ``y0`` or ``x0`` are the initial position, ``v0`` is the initial velocity, ``g`` is gravity acceleration, ``a`` is the launch angle, and ``t`` is the time in seconds
 
 ---
 <a name="parabolic-jump"></a>
