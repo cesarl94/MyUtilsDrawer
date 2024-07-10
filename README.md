@@ -1,5 +1,11 @@
 # MyUtilsDrawer
 
+In this shared document, I plan to include all the functions that have helped me solve tasks more than once. It has become a common problem for me to remember in which project I did "this or that" and, on top of that, to find precisely where I did it. That's why I decided to start compiling everything in this document that can help solve a specific task, regardless of the project it is part of.
+
+If you think any of these functions are useful to you, feel free to use them, but I encourage us to read and understand the code we're using, rather than just copying and pasting.
+
+Some functions I created myself, others I borrowed from places with their respective links, and others I don't even remember where I got them from, so if you know the origin of some of these, let me know in my email: lorenzon.cesar@hotmail.com
+
 <a name="table-of-contents"></a>
 ## Table of Contents:
 > [Material Functions:](#material-functions)<br>
