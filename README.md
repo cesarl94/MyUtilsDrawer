@@ -2,7 +2,7 @@
 
 In this shared document, I plan to include all the functions that have helped me solve tasks more than once. It has become a common problem for me to remember in which project I did "this or that" and, on top of that, to find precisely where I did it. That's why I decided to start compiling everything in this document that can help solve a specific task, regardless of the project it is part of.
 
-If you think any of these functions are useful to you, feel free to use them, but I encourage us to read and understand the code we're using, rather than just copying and pasting.
+If you think any of these functions are useful to you, feel free to use them, but I encourage us to read and understand the code we're using, rather than just copying and pasting. These functions could be in any programming language, because the idea is the logic, not the sintaxys.
 
 Some functions I created myself, others I borrowed from places with their respective links, and others I don't even remember where I got them from, so if you know the origin of some of these, let me know in my email: lorenzon.cesar@hotmail.com
 
@@ -112,6 +112,7 @@ void main() {
 | <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhe6Q42EAgEh1jn6QfbXDKI9rI0UdNXoSq2L3o4lullGLDPg5re5uGQtSfIvSEzKO3ofYU6b2QtYRNP-gnbZ4DT7CvecciIdT5-nRlE-oPbp6NSle7ZmSU5_VtZO_NHCtVQXVpxwQl9YtI/s320/ScreenShot00004.png"> | <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEht1cZMyhpkr2WJly7RKdExOHQZNnZLRGuPnPlqfbnI8dFDa3HMBeg1K3pI9kbvypwUjfM_o_f4f_9qhm0_gmD9ozYu0bqr9uirnNKSYNosZIeGuHLrNmNKlNm3Ub-ybOFOTo_jkvTXG7c/s320/ScreenShot00005.png"> |
 
 You need to enter in this link: https://grephicsnerd.blogspot.com/2017/07/clip-stretching-of-deferred-decal-in-ue4.html<br>
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhzLYNGgdkAKjbnzXcf5G5R1zXRk0808CbNPaVQt1MdmI4XuWefUNUIcq9qYmodz2NZxmZrmai2aw9aLsjy1q5fE6d086s1sZoIAg4Qiona5Ceq-vbxj4FO1AgTysyGLSg6QMtnog0KJ-Y/s1600/worldnormal_without_gbuffer.PNG">
 * The first node is Absolute World Position
 * Don't forget to convert the result. The last "TransformVector" node is a positive vector [0,1], not a unit vector [-1,1]
 
