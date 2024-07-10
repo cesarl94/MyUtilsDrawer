@@ -2,17 +2,18 @@
 
 <a name="table-of-contents"></a>
 ## Table of Contents:
-> [ColorsFunctions:](#colors-functions)<br>
+> [Material Functions:](#material-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Gradient Shader](#gradient-shader)<br>
-> [ParabolicFunctions:](#parabolic-functions)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Resolve Decal Artifacts](#decal-artifacts)<br>
+> [Parabolic Functions:](#parabolic-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Parabolic motion 1D and 2D:](#parabolic-motion)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump from height and duration](#parabolic-jump)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot from height, distance and duration](#parabolic-shot)<br>
 
-<a name="colors-functions"></a>
-## Colors functions:
+<a name="material-functions"></a>
+## Material functions:
 
 <a name="srgb-2-linear"></a>
 ### Colorspace conversion: sRGB to Linear and vice versa
@@ -95,6 +96,19 @@ void main() {
     gl_FragColor *=  mainColor.a;
 }
 ```
+---
+<a name="decal-artifacts"></a>
+### Resolve Decal Artifacts:
+
+
+| Before | After |
+| --- | --- |
+| <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhe6Q42EAgEh1jn6QfbXDKI9rI0UdNXoSq2L3o4lullGLDPg5re5uGQtSfIvSEzKO3ofYU6b2QtYRNP-gnbZ4DT7CvecciIdT5-nRlE-oPbp6NSle7ZmSU5_VtZO_NHCtVQXVpxwQl9YtI/s320/ScreenShot00004.png"> | <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEht1cZMyhpkr2WJly7RKdExOHQZNnZLRGuPnPlqfbnI8dFDa3HMBeg1K3pI9kbvypwUjfM_o_f4f_9qhm0_gmD9ozYu0bqr9uirnNKSYNosZIeGuHLrNmNKlNm3Ub-ybOFOTo_jkvTXG7c/s320/ScreenShot00005.png"> |
+
+You need to enter in this link: https://grephicsnerd.blogspot.com/2017/07/clip-stretching-of-deferred-decal-in-ue4.html<br>
+* The first node is Absolute World Position
+* Don't forget to convert the result. The last "TransformVector" node is a positive vector [0,1], not a unit vector [-1,1]
+
 ---
 <a name="parabolic-functions"></a>
 ## Parabolic functions:
