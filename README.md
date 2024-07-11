@@ -17,6 +17,8 @@ Some functions I created myself, others I borrowed from places with their respec
 > &nbsp;&nbsp;&nbsp;&nbsp;[Parabolic motion 1D and 2D:](#parabolic-motion)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic jump from height and duration](#parabolic-jump)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot from height, distance and duration](#parabolic-shot)<br>
+> [Unreal Functions:](#unreal-functions)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Capture variables in Lambda functions:](#lambda-capture)<br>
 
 <a name="material-functions"></a>
 ## Material functions:
@@ -201,4 +203,31 @@ void OnTick(float DeltaTime){
 
     SubsceneComponent->SetRelativeLocation(FVector(TimeDilated, 0, ZPosition));
 }
+```
+
+<a name="unreal-functions"></a>
+## Unreal functions:
+
+<a name="lambda-capture"></a>
+### Capture variables in Lambda functions:
+
+Read this document to understand how Lambda functions work in C++: https://learn.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-170
+
+I found it quite confusing regarding capturing variables by copy or by reference. If we are working with pointers, it would logically seem that since we are using referenced data, we should pass the values as references (with a "&" before the variable name). However, we still need to pass the values by copy. In any case, what we will do is create a copy of the pointer.
+
+Practical usage example with a Lambda function inside another Lambda function:
+```cpp
+// A GameState with the data of the duration of both Timers
+ACustomGameState *GameState = Cast<ACustomGameState>(UGameplayStatics::GetGameState(this));
+GetWorld()->GetTimerManager().SetTimer(TimerHandle,
+    [this, GameState]() { // It's ok! But if I use "[this, &GameState]" I will receive an error!
+        SlimeCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision); // This doesn't matter
+        K2_StartRemoval(); // This doesn't matter
+
+        // We start another Lambda function with the data read from our custom GameState
+        GetWorld()->GetTimerManager().SetTimer(TimerHandle,
+            [this]() { Destroy(); }, // "this" is still valid!
+            GameState->GameData->SlimeDisappearAnimationDuration, false);
+    },
+    GameState->GameData->SlimeDuration, false);
 ```
