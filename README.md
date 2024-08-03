@@ -8,6 +8,9 @@ Some functions I created myself, others I borrowed from places with their respec
 
 <a name="table-of-contents"></a>
 ## Table of Contents:
+> [Maths Functions:](#maths-functions)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Linear Step](#linear-step)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Rule of Five](#rule-of-five)<br>
 > [Material Functions:](#material-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
@@ -19,6 +22,48 @@ Some functions I created myself, others I borrowed from places with their respec
 > &nbsp;&nbsp;&nbsp;&nbsp;[Calculate parabolic shot from height, distance and duration](#parabolic-shot)<br>
 > [Unreal Functions:](#unreal-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Capture variables in Lambda functions:](#lambda-capture)<br>
+
+<a name="maths-functions"></a>
+## Maths Functions:
+
+<a name="linear-step"></a>
+### Linear Step:
+```cpp
+/**
+ * AKA InverseLerp
+ * if you give me an factor0Param I return an 0.
+ * if you give me an factor1Param I return an 1.
+ * then you can give me any input and I will return a value between 0 and 1 according to the values passed before.
+ */
+UFUNCTION(BlueprintCallable, Category = "MathUtils")
+static double LinearStep(double factor0Param, double factor1Param, double input, bool clamp) {
+	const double denom = factor1Param - factor0Param;
+	if (denom == 0) {
+		return input < factor0Param ? 0 : 1;
+	}
+	const double t = (input - factor0Param) / denom;
+	return clamp ? FMath::Clamp(t, 0, 1) : t;
+}
+```
+
+<a name="rule-of-five"></a>
+### Rule of Five:
+```cpp
+/**
+ * if you give me an inputDataA I return an outputDataA.
+ * if you give me an inputDataB I return an outputDataB.
+ * then you can give me any input and I will return a value according to the values passed before.
+ * If clamp is true, the returns values will be held between outputDataA and outputDataB
+ *
+ * If inputDataA is 0 and inputDataB is 1, you should use lerp instead this.
+ * If outputDataA is 0 and outputDataB is 1, you should use linearstep instead this.
+ */
+UFUNCTION(BlueprintCallable, Category = "MathUtils")
+static double RuleOfFive(double inputDataA, double outputDataA, double inputDataB, double outputDataB, double input, bool clamp) {
+	const double t = LinearStep(inputDataA, inputDataB, input, clamp);
+	return FMath::Lerp(outputDataA, outputDataB, t);
+}
+```
 
 <a name="material-functions"></a>
 ## Material functions:
