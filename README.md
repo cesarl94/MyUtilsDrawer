@@ -11,6 +11,7 @@ Some functions I created myself, others I borrowed from places with their respec
 > [Maths Functions:](#maths-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Linear Step](#linear-step)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Rule of Five](#rule-of-five)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Line Intersection](#line-intersection)<br>
 > [Material Functions:](#material-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
@@ -62,6 +63,28 @@ UFUNCTION(BlueprintCallable, Category = "MathUtils")
 static double RuleOfFive(double inputDataA, double outputDataA, double inputDataB, double outputDataB, double input, bool clamp) {
 	const double t = LinearStep(inputDataA, inputDataB, input, clamp);
 	return FMath::Lerp(outputDataA, outputDataB, t);
+}
+```
+
+<a name="line-intersection"></a>
+### Line intersection:
+```ts
+export function getLineIntersection(a: Point, b: Point, c: Point, d: Point): Point {
+	const ux: number = b.x - a.x;
+	const uy: number = b.y - a.y;
+	const vx: number = d.x - c.x;
+	const vy: number = d.y - c.y;
+	const hx: number = c.x - a.x;
+	const hy: number = c.y - a.y;
+	const div: number = ux * vy - uy * vx;
+	// div 0 == parallel lines
+	if (div == 0) {
+		return null;
+	} else {
+		const cross: number = hx * uy - hy * ux;
+		const t: number = cross / div;
+		return new Point(vx * t + c.x, vy * t + c.y);
+	}
 }
 ```
 
