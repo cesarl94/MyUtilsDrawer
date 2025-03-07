@@ -68,23 +68,41 @@ static double RuleOfFive(double inputDataA, double outputDataA, double inputData
 
 <a name="line-intersection"></a>
 ### Line intersection:
-```ts
-export function getLineIntersection(a: Point, b: Point, c: Point, d: Point): Point {
-	const ux: number = b.x - a.x;
-	const uy: number = b.y - a.y;
-	const vx: number = d.x - c.x;
-	const vy: number = d.y - c.y;
-	const hx: number = c.x - a.x;
-	const hy: number = c.y - a.y;
-	const div: number = ux * vy - uy * vx;
+Computes the intersection point between two lines or segments.<br>
+bInfiniteLines: If true, treats the inputs as infinite lines and returns any intersection, if false, ensures the intersection is within the given segments.
+```cpp
+static bool GetLineIntersection(float ax, float ay, float bx, float by, float cx, float cy, float dx, float dy, bool bInfiniteLines, float &rvx, float &rvy) {
+	const float ux = bx - ax;
+	const float uy = by - ay;
+	const float vx = dx - cx;
+	const float vy = dy - cy;
+	const float hx = cx - ax;
+	const float hy = cy - ay;
+	const float div = ux * vy - uy * vx;
 	// div 0 == parallel lines
 	if (div == 0) {
-		return null;
-	} else {
-		const cross: number = hx * uy - hy * ux;
-		const t: number = cross / div;
-		return new Point(vx * t + c.x, vy * t + c.y);
+		return false;
 	}
+
+	if (bInfiniteLines) {
+		const float cross = hx * uy - hy * ux;
+		const float t = cross / div;
+		rvx = vx * t + cx;
+		rvy = vy * t + cy;
+		return true;
+	}
+
+	const float s = (hx * vy - hy * vx) / div;
+	const float t = (hx * uy - hy * ux) / div;
+
+	// Check if intersection is within both segments
+	if (s < 0 || s > 1 || t < 0 || t > 1) {
+		return false;
+	}
+
+	rvx = ax + s * ux;
+	rvy = ay + s * uy;
+	return true;
 }
 ```
 
