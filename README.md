@@ -178,7 +178,7 @@ Target: The angle in radians which Origin wishes to be or approximate<br>
 Returns the signed difference between two angles, in the range (-PI, PI]. If you add this to Origin you'll have the same equivalent angle<br>
 
 ```cpp
-static double DifferenceInDegrees(double Origin, double Target) {
+static double DifferenceInRadians(double Origin, double Target) {
 	double NormalizedOrigin = NormalizeRadians(Origin);
 	double NormalizedTarget = NormalizeRadians(Target);
 	double SimpleDifference = NormalizedTarget - NormalizedOrigin;
