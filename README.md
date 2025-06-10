@@ -12,6 +12,11 @@ Some functions I created myself, others I borrowed from places with their respec
 > &nbsp;&nbsp;&nbsp;&nbsp;[Linear Step](#linear-step)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Rule of Five](#rule-of-five)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Line Intersection](#line-intersection)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Reflect Ray](#reflect-ray)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Normalize Degrees](#normalize-degrees)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Normalize Radians](#normalize-radians)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Difference in Degrees](#difference-in-degrees)<br>
+> &nbsp;&nbsp;&nbsp;&nbsp;[Difference in Radians](#difference-in-radians)<br>
 > [Material Functions:](#material-functions)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Colorspace conversion: sRGB to Linear and vice versa](#srgb-2-linear)<br>
 > &nbsp;&nbsp;&nbsp;&nbsp;[Layer Color](#layer-color)<br>
@@ -76,13 +81,14 @@ static bool GetLineIntersection(float ax, float ay, float bx, float by, float cx
 	const float uy = by - ay;
 	const float vx = dx - cx;
 	const float vy = dy - cy;
-	const float hx = cx - ax;
-	const float hy = cy - ay;
 	const float div = ux * vy - uy * vx;
 	// div 0 == parallel lines
 	if (div == 0) {
 		return false;
 	}
+
+	const float hx = cx - ax;
+	const float hy = cy - ay;
 
 	if (bInfiniteLines) {
 		const float cross = hx * uy - hy * ux;
@@ -103,6 +109,94 @@ static bool GetLineIntersection(float ax, float ay, float bx, float by, float cx
 	rvx = ax + s * ux;
 	rvy = ay + s * uy;
 	return true;
+}
+```
+
+<a name="reflect-ray"></a>
+### Reflect Ray:
+Given the normal of a plane, and a ray, returns the direction of the reflected ray<br>
+```cpp
+static FVector ReflectRay(const FVector &PlaneNormal, const FVector &RayNormal) {
+	FVector NormalizedPlaneNormal = PlaneNormal.GetSafeNormal();
+	FVector NormalizedRayNormal = RayNormal.GetSafeNormal();
+	return NormalizedRayNormal - 2.f * (NormalizedRayNormal | NormalizedPlaneNormal) * NormalizedPlaneNormal;
+}
+```
+
+<a name="normalize-degrees"></a>
+### Normalize Degrees:
+Normalizes an angle in degrees to an equivalent angle within the range [0, 360)<br>
+```cpp
+static double NormalizeDegrees(double Degrees) {
+	if (Degrees >= 0) {
+		return FGenericPlatformMath::Fmod(Degrees, 360.0);
+	}
+	return Degrees + FGenericPlatformMath::CeilToDouble(Degrees / -360.0) * 360.0;
+}
+```
+
+<a name="normalize-radians"></a>
+### Normalize Radians:
+Normalizes an angle in radians to an equivalent angle within the range [-PI, PI]<br>
+```cpp
+static double NormalizeRadians(double Radians) {
+	return Radians - TWO_PI * FGenericPlatformMath::FloorToDouble((Radians + PI) / TWO_PI);
+}
+```
+
+<a name="difference-in-degrees"></a>
+### Difference in Degrees:
+Calculates the minimum difference between two angles in degrees. The angles don't have to be normalized.<br>
+The result could be used in 3 ways:<br>
+* To approximate Origin to Target: If you add the ReturnedValue to Origin (totally or partially), you'll get closer to the Target angle<br>
+* To know the aperture between both angles: Calculate Abs(ReturnedValue) and you'll get the aperture<br>
+* To know the clockwise of the difference: The sign of the ReturnedValue can give you the clue if you need turn clockwise or counterclockwise<br>
+
+Origin: Given Angle in degrees<br>
+Target: The angle in degrees which Origin wishes to be or approximate<br>
+
+Returns the signed difference between two angles, in the range [-180, 180). If you add this to Origin you'll have the same equivalent angle<br>
+
+```cpp
+static double DifferenceInDegrees(double Origin, double Target) {
+	double diff = FGenericPlatformMath::Fmod((Target - Origin + 180.0), 360.0) - 180.0;
+	return diff < -180.0 ? diff + 360.0 : diff;
+}
+```
+
+<a name="difference-in-radians"></a>
+### Difference in Radians:
+Calculates the minimum difference between two angles in radians. The angles don't have to be normalized.<br>
+The result could be used in 3 ways:<br>
+* To approximate Origin to Target: If you add the ReturnedValue to Origin (totally or partially), you'll get closer to the Target angle<br>
+* To know the aperture between both angles: Calculate Abs(ReturnedValue) and you'll get the aperture<br>
+* To know the clockwise of the difference: The sign of the ReturnedValue can give you the clue if you need turn clockwise or counterclockwise<br>
+
+Origin: Given Angle in radians<br>
+Target: The angle in radians which Origin wishes to be or approximate<br>
+
+Returns the signed difference between two angles, in the range (-PI, PI]. If you add this to Origin you'll have the same equivalent angle<br>
+
+```cpp
+static double DifferenceInDegrees(double Origin, double Target) {
+	double NormalizedOrigin = NormalizeRadians(Origin);
+	double NormalizedTarget = NormalizeRadians(Target);
+	double SimpleDifference = NormalizedTarget - NormalizedOrigin;
+	
+	bool IsOriginPositive = NormalizedOrigin >= 0;
+	
+	// Angles have the same sign
+	if (IsOriginPositive == (NormalizedTarget >= 0)) {
+	return SimpleDifference;
+	}
+	
+	double AbsoluteDifference = FMath::Abs(SimpleDifference);
+	
+	if (AbsoluteDifference <= PI) {
+	return SimpleDifference;
+	}
+	
+	return (TWO_PI - AbsoluteDifference) * (IsOriginPositive ? 1.0 : -1.0);
 }
 ```
 
