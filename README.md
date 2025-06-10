@@ -179,24 +179,8 @@ Returns the signed difference between two angles, in the range (-PI, PI]. If you
 
 ```cpp
 static double DifferenceInRadians(double Origin, double Target) {
-	double NormalizedOrigin = NormalizeRadians(Origin);
-	double NormalizedTarget = NormalizeRadians(Target);
-	double SimpleDifference = NormalizedTarget - NormalizedOrigin;
-	
-	bool IsOriginPositive = NormalizedOrigin >= 0;
-	
-	// Angles have the same sign
-	if (IsOriginPositive == (NormalizedTarget >= 0)) {
-	return SimpleDifference;
-	}
-	
-	double AbsoluteDifference = FMath::Abs(SimpleDifference);
-	
-	if (AbsoluteDifference <= PI) {
-	return SimpleDifference;
-	}
-	
-	return (TWO_PI - AbsoluteDifference) * (IsOriginPositive ? 1.0 : -1.0);
+	// Simply normalize the raw difference
+	return NormalizeRadians(Target - Origin);
 }
 ```
 
